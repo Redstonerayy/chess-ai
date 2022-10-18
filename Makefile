@@ -4,7 +4,7 @@ build:
 	ninja -C ./build
 
 run: build
-	./build/chess
+	./build/main
 
 clean:
 	rm -rf ./build

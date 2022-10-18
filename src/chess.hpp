@@ -5,6 +5,6 @@
 #ifndef CHESS_AI_CHESS_HPP
 #define CHESS_AI_CHESS_HPP
 
-#include "../chess/Board.hpp"
+#include "include/Board.hpp"
 
 #endif //CHESS_AI_CHESS_HPP
