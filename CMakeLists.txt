@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 # build chess
 FILE(GLOB SOURCE_FILES src/chess/*.cpp)
 add_library(chess ${SOURCE_FILES})
-target_include_directories(chess PRIVATE src/chess)
+target_include_directories(chess PRIVATE src/include)
 
 # main file
 add_executable(main src/main.cpp ${SOURCE_FILES})
