@@ -1,6 +1,7 @@
 #include "Board.hpp"
 
 #include <algorithm>
+#include <iostream>
 
 // check which type of piece is on a certain field given a certain piece
 // which wants to move/take
@@ -8,7 +9,9 @@
 // 1 = can move, is enemy
 // 2 = can't move, is allied
 int Board::CheckField(Piece &piece, int tocheckx, int tochecky){
-    Piece tocheckpiece = this->At(tocheckx, tochecky);
+    if( (tocheckx < 0 || tocheckx > 7) || (tochecky < 0 || tochecky > 7) ) return 3; // out of bounds
+
+	Piece tocheckpiece = this->At(tocheckx, tochecky);
     if (tocheckpiece.pieceid != EMPTY){
         // check for enemy
         if( (tocheckpiece.pieceid > 0 && piece.pieceid < 0) ||
@@ -47,6 +50,6 @@ void Board::MakeMove(int x, int y, int newx, int newy){
 Piece Board::At(int x, int y){
     Piece piece{-1, -1};
     piece.pieceid = this->p_board[y][x];
-    piece.piecevalue = abs(int(piece.pieceid % 10));
+    piece.piecevalue = abs(piece.pieceid % 10);
     return piece;
 }

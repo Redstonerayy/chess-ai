@@ -5,12 +5,12 @@
 // print info on piece on field x, y
 void Board::FieldInfo(int x, int y){
     int piece = this->p_board[y][x];
-    int value = abs(int(piece / 10));
+    int value = abs(piece % 10);
     bool uppercase = true; // white is uppercase
     if (piece < 0){
         uppercase = false;
         std::cout << "BLACK ";
-    } else {
+    } else if (piece > 0) {
         std::cout << "WHITE ";
     }
     switch (abs(piece % 10)) {

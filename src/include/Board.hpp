@@ -11,8 +11,6 @@ class Board {
 public:
     Board();
 
-    void test();
-
     // game procedure
     void LoadStartPosition();
     void RequestMove(int x, int y, int newx, int newy);
@@ -26,6 +24,7 @@ public:
     std::vector<std::vector<int>> p_board;
     
     // get possible moves
+    std::vector<std::vector<int>> GetAllPossibleMoves(int player);
     std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y);
     std::vector<std::pair<int, int>> GetPossibleMovesRook(int x, int y);
     std::vector<std::pair<int, int>> GetPossibleMovesKnight(int x, int y);

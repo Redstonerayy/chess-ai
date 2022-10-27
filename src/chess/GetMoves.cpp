@@ -1,14 +1,33 @@
 #include "Board.hpp"
 
 #include <vector>
+#include <cmath>
+#include <iostream>
+
+// get all possible moves
+std::vector<std::vector<int>> Board::GetAllPossibleMoves(int player){ // 0 = black, 1 = white
+	std::vector<std::vector<int>> allmoves;
+	for(int i = 0; i < 8; ++i){
+        for(int j = 0; j < 8; ++j){
+			if( (this->At(i, j).pieceid > 0 && player) || (this->At(i, j).pieceid < 0 && !player) ){ // if piece matches color
+				std::vector<std::pair<int, int>> moves = this->GetPossibleMoves(i, j);
+				for(int k = 0; k < moves.size(); ++k){
+					allmoves.emplace_back( {i, j, moves[k].first, moves[k].second} ); // from x,y to x,y
+				}
+			}
+        }
+    }
+}
+
 
 // check what piece is on field
 // call matching function and
 // return moves of this piece
 std::vector<std::pair<int, int>> Board::GetPossibleMoves(int x, int y) {
     Piece pieceinfo = this->At(x,y); // get info on piece
-    if(pieceinfo.pieceid == 0) return {};
-    switch (pieceinfo.pieceid) {
+    std::cout << pieceinfo.pieceid << std::endl;
+	if(pieceinfo.pieceid == 0) return {};
+    switch (std::abs(pieceinfo.pieceid % 10)) {
         case 1: // rook
             return GetPossibleMovesRook(x, y);
             break;
@@ -72,24 +91,32 @@ std::vector<std::pair<int, int>> Board::GetStraightMoves(int x, int y) {
         int check = this->CheckField(piece, i, y);
         if(check == 0) moves.emplace_back( i, y );
         if(check == 1) moves.emplace_back( i, y );
+		if(check == 2) break; // end loop if it is blocked by ally
+		if(check == 3) break; // end loop if out of bounds
     }
     // check x row right
     for (int i = x + 1; i < 8; ++i) {
         int check = this->CheckField(piece, i, y);
         if(check == 0) moves.emplace_back( i, y );
         if(check == 1) moves.emplace_back( i, y );
+		if(check == 2) break; // end loop if it is blocked by ally
+		if(check == 3) break; // end loop if out of bounds
     }
     // check y row up
     for (int i = y - 1; i >= 0; --i) {
         int check = this->CheckField(piece, x, i);
         if(check == 0) moves.emplace_back( x, i );
         if(check == 1) moves.emplace_back( x, i );
+		if(check == 2) break; // end loop if it is blocked by ally
+		if(check == 3) break; // end loop if out of bounds
     }
     // check y row down
     for (int i = y + 1; i < 8; ++i) {
         int check = this->CheckField(piece, x, i);
         if(check == 0) moves.emplace_back( x, i );
         if(check == 1) moves.emplace_back( x, i );
+		if(check == 2) break; // end loop if it is blocked by ally
+		if(check == 3) break; // end loop if out of bounds
     }
 
     return moves;
@@ -104,6 +131,8 @@ std::vector<std::pair<int, int>> Board::GetDiagonalMoves(int x, int y) {
             int check = this->CheckField(piece, i, j);
             if(check == 0) moves.emplace_back( i, j );
             if(check == 1) moves.emplace_back( i, j );
+			if(check == 2) break; // end loop if it is blocked by ally
+			if(check == 3) break; // end loop if out of bounds
         }
     }
     // check left down
@@ -112,6 +141,8 @@ std::vector<std::pair<int, int>> Board::GetDiagonalMoves(int x, int y) {
             int check = this->CheckField(piece, i, j);
             if(check == 0) moves.emplace_back( i, j );
             if(check == 1) moves.emplace_back( i, j );
+			if(check == 2) break; // end loop if it is blocked by ally
+			if(check == 3) break; // end loop if out of bounds
         }
     }
     // check right up
@@ -120,6 +151,8 @@ std::vector<std::pair<int, int>> Board::GetDiagonalMoves(int x, int y) {
             int check = this->CheckField(piece, i, j);
             if(check == 0) moves.emplace_back( i, j );
             if(check == 1) moves.emplace_back( i, j );
+			if(check == 2) break; // end loop if it is blocked by ally
+			if(check == 3) break; // end loop if out of bounds
         }
     }
     // check right down
@@ -128,6 +161,8 @@ std::vector<std::pair<int, int>> Board::GetDiagonalMoves(int x, int y) {
             int check = this->CheckField(piece, i, j);
             if(check == 0) moves.emplace_back( i, j );
             if(check == 1) moves.emplace_back( i, j );
+			if(check == 2) break; // end loop if it is blocked by ally
+			if(check == 3) break; // end loop if out of bounds
         }
     }
 
@@ -150,11 +185,19 @@ std::vector<std::pair<int, int>> Board::GetPawnMoves(int x, int y) {
     Piece piece = this->At(x, y);
     std::vector<std::pair<int, int>> moves;
     // factor to make it fit for either side
-    int factor = -1;
-    if(piece.pieceid > 0){
-        factor = 1;
-    }
-    for (int i = 0; i < pawnoffsets.size(); i += 2) {
+    int factor = 1;
+	int isonbaseline = 0;
+	if(piece.pieceid < 0){ // is black
+        factor = -1;
+		if(y != 1){ // check black baseline
+			isonbaseline = 1;
+		}
+    } else { // is white
+    	// check white baseline
+		if(y != 6) isonbaseline = 1;
+	}
+	std::cout << isonbaseline << std::endl;
+    for (int i = isonbaseline; i < pawnoffsets.size(); i += 2) {
         std::vector<int> cords = { x + pawnoffsets[i] * factor, y + pawnoffsets[i + 1] * factor };
         int check = this->CheckField(piece, cords[0], cords[1] );
         if(check == 0) moves.emplace_back( cords[0], cords[1] );

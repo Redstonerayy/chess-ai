@@ -4,10 +4,18 @@
 int main() {
     Board board = Board();
     board.PrintBoard();
-    board.test();
-    // std::vector<std::pair<int, int>> moves = board.GetPossibleMoves(0, 0);
-    // for(auto move : moves){
-    //     std::cout << move.first << ":" << move.second << std::endl;
-    // }
+    
+    
+
+    for(int i = 0; i < 8; ++i){
+        for(int j = 0; j < 8; ++j){
+            board.FieldInfo(i, j);
+            std::vector<std::pair<int, int>> moves = board.GetPossibleMoves(i, j);
+            for(auto move : moves){
+                std::cout << move.first << ":" << move.second << std::endl;
+            }
+        }
+    }
+
     return 0;
 }

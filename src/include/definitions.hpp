@@ -13,8 +13,6 @@ const std::vector<std::vector<int>> StartBoard = {
         {   0,   0,   0,   0,   0,   0,   0,   0},
         {   0,   0,   0,   0,   0,   0,   0,   0},
         {   0,   0,   0,   0,   0,   0,   0,   0},
-        {   0,   0,   0,   0,   0,   0,   0,   0},
-        {   0,   0,   0,   0,   0,   0,   0,   0},
         {  16,  16,  16,  16,  16,  16,  16,  16},
         {  51,  32,  33,  94,  05,  33,  32,  51},
 };
@@ -43,8 +41,8 @@ const std::vector<int> knightoffsets = {
 
 // white perspective, invert for black perspective
 const std::vector<int> pawnoffsets = {
+        0, -2, // first so it can be skipped easily
         0, -1,
-        0, -2,
         -1, -1,
         1, -1,
 };
