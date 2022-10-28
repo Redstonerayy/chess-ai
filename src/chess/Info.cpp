@@ -94,3 +94,9 @@ void Board::PrintBoard() {
         std::cout << "\n";
     }
 }
+
+void Board::PrintBoardMoves(std::vector<std::vector<int>> &moves){
+    for(std::vector<int> &move : moves){
+        
+    }
+}

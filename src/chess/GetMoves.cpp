@@ -12,11 +12,14 @@ std::vector<std::vector<int>> Board::GetAllPossibleMoves(int player){ // 0 = bla
 			if( (this->At(i, j).pieceid > 0 && player) || (this->At(i, j).pieceid < 0 && !player) ){ // if piece matches color
 				std::vector<std::pair<int, int>> moves = this->GetPossibleMoves(i, j);
 				for(int k = 0; k < moves.size(); ++k){
-					allmoves.emplace_back( {i, j, moves[k].first, moves[k].second} ); // from x,y to x,y
+                    // std::cout << moves.at(k).first << ":" << moves.at(k).second << std::endl;
+					allmoves.emplace_back( (std::initializer_list<int>) {i, j, moves.at(k).first, moves.at(k).second} ); // from x,y to x,y
 				}
 			}
         }
     }
+
+    return allmoves;
 }
 
 
@@ -25,7 +28,7 @@ std::vector<std::vector<int>> Board::GetAllPossibleMoves(int player){ // 0 = bla
 // return moves of this piece
 std::vector<std::pair<int, int>> Board::GetPossibleMoves(int x, int y) {
     Piece pieceinfo = this->At(x,y); // get info on piece
-    std::cout << pieceinfo.pieceid << std::endl;
+    // std::cout << pieceinfo.pieceid << std::endl;
 	if(pieceinfo.pieceid == 0) return {};
     switch (std::abs(pieceinfo.pieceid % 10)) {
         case 1: // rook
@@ -196,7 +199,7 @@ std::vector<std::pair<int, int>> Board::GetPawnMoves(int x, int y) {
     	// check white baseline
 		if(y != 6) isonbaseline = 1;
 	}
-	std::cout << isonbaseline << std::endl;
+	// std::cout << isonbaseline << std::endl;
     for (int i = isonbaseline; i < pawnoffsets.size(); i += 2) {
         std::vector<int> cords = { x + pawnoffsets[i] * factor, y + pawnoffsets[i + 1] * factor };
         int check = this->CheckField(piece, cords[0], cords[1] );

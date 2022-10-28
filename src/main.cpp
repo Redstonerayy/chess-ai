@@ -5,16 +5,9 @@ int main() {
     Board board = Board();
     board.PrintBoard();
     
-    
-
-    for(int i = 0; i < 8; ++i){
-        for(int j = 0; j < 8; ++j){
-            board.FieldInfo(i, j);
-            std::vector<std::pair<int, int>> moves = board.GetPossibleMoves(i, j);
-            for(auto move : moves){
-                std::cout << move.first << ":" << move.second << std::endl;
-            }
-        }
+    std::vector<std::vector<int>> moves = board.GetAllPossibleMoves(1);
+    for(auto move : moves){
+        std::cout << move.at(0) << ":" << move.at(1) << " to " << move.at(2) << ":" << move.at(3) << std::endl;
     }
 
     return 0;
