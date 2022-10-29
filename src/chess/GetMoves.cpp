@@ -203,8 +203,8 @@ std::vector<std::pair<int, int>> Board::GetPawnMoves(int x, int y) {
     for (int i = isonbaseline; i < pawnoffsets.size(); i += 2) {
         std::vector<int> cords = { x + pawnoffsets[i] * factor, y + pawnoffsets[i + 1] * factor };
         int check = this->CheckField(piece, cords[0], cords[1] );
-        if(check == 0) moves.emplace_back( cords[0], cords[1] );
-        if(check == 1) moves.emplace_back( cords[0], cords[1] );
+        if(check == 0 && pawnoffsets[i] == 0) moves.emplace_back( cords[0], cords[1] );
+        if(check == 1 && pawnoffsets[i] != 0) moves.emplace_back( cords[0], cords[1] );
     }
     return moves;
 }

@@ -96,7 +96,25 @@ void Board::PrintBoard() {
 }
 
 void Board::PrintBoardMoves(std::vector<std::vector<int>> &moves){
+    // convert board to board as strings
+    std::vector<std::vector<std::string>> boardwithmoves;
+    for (int i = 0; i < this->p_board.size(); ++i) {
+        std::vector<std::string> newrow;
+        for (int j = 0; j < this->p_board[i].size(); ++j) {
+            newrow.emplace_back(this->FieldAsString(j, i));
+        }
+        boardwithmoves.push_back(newrow);
+    }
+    // set fields to X, where a move can be made to
     for(std::vector<int> &move : moves){
-        
+        boardwithmoves.at(move.at(3)).at(move.at(2)) = "X"; // x,y cordinate of target field
+    }
+
+    for (int i = 0; i < this->p_board.size(); ++i) {
+        std::cout << "| ";
+        for (int j = 0; j < this->p_board[i].size(); ++j) {
+            std::cout << boardwithmoves.at(i).at(j) << " | ";
+        }
+        std::cout << "\n";
     }
 }

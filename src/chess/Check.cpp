@@ -29,15 +29,17 @@ bool Board::IsValidMove(int x, int y, int newx, int newy) {
     std::vector<std::pair<int, int>> possiblemoves = this->GetPossibleMoves(x, y);
 //    for (auto & possiblemove : possiblemoves) {
 //        if(possiblemove.first == newx && possiblemove.second == newy){
+//            std::cout << "test\n";
 //            return true;
 //        }
 //    }
-    std::ranges::any_of(
+    
+    return std::ranges::any_of(
         possiblemoves.cbegin(),
         possiblemoves.cend(),
         [newx, newy](auto & possiblemove){ return possiblemove.first == newx && possiblemove.second == newy; }
         );
-    return false;
+
 }
 
 // overwrite new with old, set old to 0
