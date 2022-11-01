@@ -6,7 +6,7 @@
 // first digit is value, second id of piece
 // rook has the value 5 and 1 the id of piece
 // rook = (-)51, knight = (-)32, bishop = (-)33, queen = (-)94, king = (-)05, pawn = (-)16
-const std::vector<std::vector<int>> StartBoard = {
+const std::vector<std::vector<int>> startboard = {
         { -51, -32, -33, -94, -05, -33, -32, -51},
         { -16, -16, -16, -16, -16, -16, -16, -16},
         {   0,   0,   0,   0,   0,   0,   0,   0},
@@ -15,12 +15,6 @@ const std::vector<std::vector<int>> StartBoard = {
         {   0,   0,   0,   0,   0,   0,   0,   0},
         {  16,  16,  16,  16,  16,  16,  16,  16},
         {  51,  32,  33,  94,  05,  33,  32,  51},
-};
-
-// hold piece info
-struct Piece {
-    int pieceid;
-    int piecevalue;
 };
 
 // offset positons for knight, 8 possible fields
@@ -56,4 +50,31 @@ enum {
     QUEEN,
     KING,
     PAWN,
+};
+
+// hold piece info
+struct Piece {
+    int pieceid;
+    int piecevalue;
+};
+
+struct Move {
+    int startx;
+    int starty;
+    int newx;
+    int newy;
+};
+
+struct ChessBoard {
+    std::vector<std::vector<int>> field;
+    std::vector<Move> moves;
+    int turncount;
+    int whitescore;
+    int blackscore;
+    int turning;
+};
+
+struct Node {
+    ChessBoard board;
+    std::vector<ChessBoard> childnodes;
 };

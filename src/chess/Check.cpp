@@ -1,57 +1,30 @@
-#include "Board.hpp"
+#include <vector>
 
-#include <algorithm>
-#include <iostream>
+#include "Check.hpp"
+#include "Macros.hpp"
 
 // check which type of piece is on a certain field given a certain piece
 // which wants to move/take
 // 0 = can move, is empty
 // 1 = can move, is enemy
 // 2 = can't move, is allied
-int Board::CheckField(Piece &piece, int tocheckx, int tochecky){
-    if( (tocheckx < 0 || tocheckx > 7) || (tochecky < 0 || tochecky > 7) ) return 3; // out of bounds
+// 3 = out of bounds
+int CheckField(ChessBoard &board, int tocheckx, int tochecky){
+     // check if out of bounds
+    if( (tocheckx < 0 || tocheckx > 7) || (tochecky < 0 || tochecky > 7) ) return 3;
 
-	Piece tocheckpiece = this->At(tocheckx, tochecky);
-    if (tocheckpiece.pieceid != EMPTY){
-        // check for enemy
-        if( (tocheckpiece.pieceid > 0 && piece.pieceid < 0) ||
-            (tocheckpiece.pieceid < 0 && piece.pieceid > 0) ){
-            return 1;
-        }
-        return 2;
-    } else {
-        return 0;
+    Piece tocheckpiece = At(board.field, tocheckx, tochecky);
+    
+    if(tocheckpiece.piecevalue == 0) return 0; // empty
+    if(board.turning){ // white
+        return tocheckpiece.pieceid < 0 ? 1 : 2; 
+    } else { // black
+        return tocheckpiece.pieceid > 0 ? 1 : 2;
     }
 }
 
-// get all moves for piece and check them against a certain field
-bool Board::IsValidMove(int x, int y, int newx, int newy) {
-    std::vector<std::pair<int, int>> possiblemoves = this->GetPossibleMoves(x, y);
-//    for (auto & possiblemove : possiblemoves) {
-//        if(possiblemove.first == newx && possiblemove.second == newy){
-//            std::cout << "test\n";
-//            return true;
-//        }
-//    }
-    
-    return std::ranges::any_of(
-        possiblemoves.cbegin(),
-        possiblemoves.cend(),
-        [newx, newy](auto & possiblemove){ return possiblemove.first == newx && possiblemove.second == newy; }
-        );
-
-}
-
 // overwrite new with old, set old to 0
-void Board::MakeMove(int x, int y, int newx, int newy){
-    this->p_board[newy][newx] = this->p_board[y][x];
-    this->p_board[y][x] = 0;
-}
-
-// get info on piece at x, y
-Piece Board::At(int x, int y){
-    Piece piece{-1, -1};
-    piece.pieceid = this->p_board[y][x];
-    piece.piecevalue = abs(piece.pieceid % 10);
-    return piece;
+void MakeMove(ChessBoard &board, int x, int y, int newx, int newy){
+    board.field.at(newy).at(newx) = board.field.at(y).at(x);
+    board.field.at(y).at(x) = 0;
 }

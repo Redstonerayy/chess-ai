@@ -16,11 +16,7 @@ public:
     bool RequestMove(int x, int y, int newx, int newy);
     bool GetPlayerMoveInput();
 
-    // Logging
-    void FieldInfo(int x, int y);
-    std::string FieldAsString(int x, int y);
-    void PrintBoard();
-    void PrintBoardMoves(std::vector<std::vector<int>> &moves);
+
 
 // private:
     std::vector<std::vector<int>> p_board;

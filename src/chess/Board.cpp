@@ -10,7 +10,7 @@ Board::Board() {
 }
 
 void Board::LoadStartPosition() {
-    this->p_board = StartBoard;
+    this->p_board = startboard;
 }
 
 bool Board::RequestMove(int x, int y, int newx, int newy){

@@ -1,17 +1,26 @@
-#include "chess.hpp"
+#include <limits>
 #include <iostream>
 
+#include "definitions.hpp"
+#include "Info.hpp"
+#include "Macros.hpp"
+
 int main() {
-    Board board = Board();
-    // board.PrintBoard();
-    
-    std::vector<std::vector<int>> moves = board.GetAllPossibleMoves(1);
-    // for(auto move : moves){
-    //     std::cout << move.at(0) << ":" << move.at(1) << " to " << move.at(2) << ":" << move.at(3) << std::endl;
-    // }
-    board.PrintBoardMoves(moves);
-    board.GetPlayerMoveInput();
-    board.PrintBoard();
+    ChessBoard start;
+    start.field = startboard;
+    start.blackscore = std::numeric_limits<int>::max();
+    start.whitescore = std::numeric_limits<int>::min();
+    start.turncount = 0;
+    start.turning = 1;
+
+    Node rootnode;
+    rootnode.board = start;
+
+    PrintBoard(rootnode.board);
+
+    Piece piece = At(rootnode.board.field, 0, 0);
+
+    std::cout << piece.pieceid << "\n";
 
     return 0;
 }
