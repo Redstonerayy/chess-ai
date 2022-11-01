@@ -63,6 +63,16 @@ struct Move {
     int starty;
     int newx;
     int newy;
+
+    // possible ctor, but Move{x,y,x,y} can also be used
+    // behaviour of structs and emplace_back changed in c++ 20
+    // @https://stackoverflow.com/questions/13812703/c11-emplace-back-on-vectorstruct
+    // Move(int startx, int stary, int newx, int newy)
+    //     : startx(startx)
+    //     , starty(starty)
+    //     , newx(newx)
+    //     , newy(newy)
+    // {}
 };
 
 struct ChessBoard {

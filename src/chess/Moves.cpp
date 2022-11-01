@@ -8,16 +8,16 @@
 #include <iostream>
 
 // get all possible moves
-std::vector<std::vector<int>> GetAllPossibleMoves(ChessBoard &board, int player){ // 0 = black, 1 = white
-	std::vector<std::vector<int>> allmoves;
+std::vector<Move> GetAllPossibleMoves(ChessBoard &board, int player){ // 0 = black, 1 = white
+	std::vector<Move> allmoves;
 	for(int i = 0; i < 8; ++i){
         for(int j = 0; j < 8; ++j){
             Piece piece = At(board.field, i, j);
 			if( (piece.pieceid > 0 && player) || (piece.pieceid < 0 && !player) ){ // if piece matches color
-				std::vector<std::pair<int, int>> moves = GetPossibleMoves(board, i, j);
+				std::vector<Move> moves = GetPossibleMoves(board, i, j);
 				for(int k = 0; k < moves.size(); ++k){
                     // std::cout << moves.at(k).first << ":" << moves.at(k).second << std::endl;
-					allmoves.emplace_back( (std::initializer_list<int>) {i, j, moves.at(k).first, moves.at(k).second} ); // from x,y to x,y
+					allmoves.insert(allmoves.begin(), moves.begin(), moves.end()); // from x,y to x,y
 				}
 			}
         }
@@ -30,7 +30,7 @@ std::vector<std::vector<int>> GetAllPossibleMoves(ChessBoard &board, int player)
 // check what piece is on field
 // call matching function and
 // return moves of this piece
-std::vector<std::pair<int, int>> GetPossibleMoves(ChessBoard &board, int x, int y) {
+std::vector<Move> GetPossibleMoves(ChessBoard &board, int x, int y) {
     Piece pieceinfo = At(board.field, x,y); // get info on piece
     // std::cout << pieceinfo.pieceid << std::endl;
 	if(pieceinfo.pieceid == 0) return {};
@@ -58,31 +58,31 @@ std::vector<std::pair<int, int>> GetPossibleMoves(ChessBoard &board, int x, int 
 }
 
 //functions to get moves for each different piece
-inline std::vector<std::pair<int, int>> GetPossibleMovesRook(ChessBoard &board, int x, int y){
+inline std::vector<Move> GetPossibleMovesRook(ChessBoard &board, int x, int y){
     return GetStraightMoves(board, x, y);
 }
 
-inline std::vector<std::pair<int, int>> GetPossibleMovesKnight(ChessBoard &board, int x, int y){
+inline std::vector<Move> GetPossibleMovesKnight(ChessBoard &board, int x, int y){
     return GetKnightMoves(board, x, y);
 }
 
-inline std::vector<std::pair<int, int>> GetPossibleMovesBishop(ChessBoard &board, int x, int y){
+inline std::vector<Move> GetPossibleMovesBishop(ChessBoard &board, int x, int y){
     return GetDiagonalMoves(board, x, y);
 }
 
-std::vector<std::pair<int, int>> GetPossibleMovesQueen(ChessBoard &board, int x, int y){
-    std::vector<std::pair<int, int>> straight = GetStraightMoves(board, x, y);
-    std::vector<std::pair<int, int>> diagonal = GetDiagonalMoves(board, x, y);
+std::vector<Move> GetPossibleMovesQueen(ChessBoard &board, int x, int y){
+    std::vector<Move> straight = GetStraightMoves(board, x, y);
+    std::vector<Move> diagonal = GetDiagonalMoves(board, x, y);
     // add two vectors
     straight.insert( straight.end(), diagonal.begin(), diagonal.end());
     return straight;
 }
 
-inline std::vector<std::pair<int, int>> GetPossibleMovesKing(ChessBoard &board, int x, int y) {
+inline std::vector<Move> GetPossibleMovesKing(ChessBoard &board, int x, int y) {
     return GetKingMoves(board, x, y);
 }
 
-inline std::vector<std::pair<int, int>> GetPossibleMovesPawn(ChessBoard &board, int x, int y) {
+inline std::vector<Move> GetPossibleMovesPawn(ChessBoard &board, int x, int y) {
     return GetPawnMoves(board, x, y);
 }
 
@@ -90,38 +90,38 @@ inline std::vector<std::pair<int, int>> GetPossibleMovesPawn(ChessBoard &board, 
 // and which fields can be reached
 // use predefined offsets for pawn and knight
 // for loops for king
-std::vector<std::pair<int, int>> GetStraightMoves(ChessBoard &board, int x, int y) {
+std::vector<Move> GetStraightMoves(ChessBoard &board, int x, int y) {
     Piece piece = At(board.field, x, y);
-    std::vector<std::pair<int, int>> moves;
+    std::vector<Move> moves;
     // check x row left
     for (int i = x - 1; i >= 0; --i) {
         int check = CheckField(board, i, y);
-        if(check == 0) moves.emplace_back( i, y );
-        if(check == 1) moves.emplace_back( i, y );
+        if(check == 0) moves.emplace_back( Move{Move{x, y, i, y}} );
+        if(check == 1) moves.emplace_back( Move{x, y, i, y} );
 		if(check == 2) break; // end loop if it is blocked by ally
 		if(check == 3) break; // end loop if out of bounds
     }
     // check x row right
     for (int i = x + 1; i < 8; ++i) {
         int check = CheckField(board, i, y);
-        if(check == 0) moves.emplace_back( i, y );
-        if(check == 1) moves.emplace_back( i, y );
+        if(check == 0) moves.emplace_back( Move{x, y, i, y} );
+        if(check == 1) moves.emplace_back( Move{x, y, i, y} );
 		if(check == 2) break; // end loop if it is blocked by ally
 		if(check == 3) break; // end loop if out of bounds
     }
     // check y row up
     for (int i = y - 1; i >= 0; --i) {
         int check = CheckField(board, i, y);
-        if(check == 0) moves.emplace_back( x, i );
-        if(check == 1) moves.emplace_back( x, i );
+        if(check == 0) moves.emplace_back( Move{x, y, x, i} );
+        if(check == 1) moves.emplace_back( Move{x, y, x, i} );
 		if(check == 2) break; // end loop if it is blocked by ally
 		if(check == 3) break; // end loop if out of bounds
     }
     // check y row down
     for (int i = y + 1; i < 8; ++i) {
         int check = CheckField(board, i, y);
-        if(check == 0) moves.emplace_back( x, i );
-        if(check == 1) moves.emplace_back( x, i );
+        if(check == 0) moves.emplace_back( Move{x, y, x, i} );
+        if(check == 1) moves.emplace_back( Move{x, y, x, i} );
 		if(check == 2) break; // end loop if it is blocked by ally
 		if(check == 3) break; // end loop if out of bounds
     }
@@ -129,15 +129,15 @@ std::vector<std::pair<int, int>> GetStraightMoves(ChessBoard &board, int x, int 
     return moves;
 }
 
-std::vector<std::pair<int, int>> GetDiagonalMoves(ChessBoard &board, int x, int y) {
+std::vector<Move> GetDiagonalMoves(ChessBoard &board, int x, int y) {
     Piece piece = At(board.field, x, y);
-    std::vector<std::pair<int, int>> moves;
+    std::vector<Move> moves;
     // check left up
     for (int i = x - 1; i >= 0; --i) {
         for (int j = y - 1; j >= 0; --j) {
             int check = CheckField(board, i, y);
-            if(check == 0) moves.emplace_back( i, j );
-            if(check == 1) moves.emplace_back( i, j );
+            if(check == 0) moves.emplace_back( Move{x, y, i, j} );
+            if(check == 1) moves.emplace_back( Move{x, y, i, j} );
 			if(check == 2) break; // end loop if it is blocked by ally
 			if(check == 3) break; // end loop if out of bounds
         }
@@ -146,8 +146,8 @@ std::vector<std::pair<int, int>> GetDiagonalMoves(ChessBoard &board, int x, int 
     for (int i = x - 1; i >= 0; --i) {
         for (int j = y + 1; j < 8; ++j) {
             int check = CheckField(board, i, y);
-            if(check == 0) moves.emplace_back( i, j );
-            if(check == 1) moves.emplace_back( i, j );
+            if(check == 0) moves.emplace_back( Move{x, y, i, j} );
+            if(check == 1) moves.emplace_back( Move{x, y, i, j} );
 			if(check == 2) break; // end loop if it is blocked by ally
 			if(check == 3) break; // end loop if out of bounds
         }
@@ -156,8 +156,8 @@ std::vector<std::pair<int, int>> GetDiagonalMoves(ChessBoard &board, int x, int 
     for (int i = x + 1; i < 8; ++i) {
         for (int j = y - 1; j >= 0; --j) {
             int check = CheckField(board, i, y);
-            if(check == 0) moves.emplace_back( i, j );
-            if(check == 1) moves.emplace_back( i, j );
+            if(check == 0) moves.emplace_back( Move{x, y, i, j} );
+            if(check == 1) moves.emplace_back( Move{x, y, i, j} );
 			if(check == 2) break; // end loop if it is blocked by ally
 			if(check == 3) break; // end loop if out of bounds
         }
@@ -166,8 +166,8 @@ std::vector<std::pair<int, int>> GetDiagonalMoves(ChessBoard &board, int x, int 
     for (int i = x + 1; i < 8; ++i) {
         for (int j = y + 1; j < 8; ++j) {
             int check = CheckField(board, i, y);
-            if(check == 0) moves.emplace_back( i, j );
-            if(check == 1) moves.emplace_back( i, j );
+            if(check == 0) moves.emplace_back( Move{x, y, i, j} );
+            if(check == 1) moves.emplace_back( Move{x, y, i, j} );
 			if(check == 2) break; // end loop if it is blocked by ally
 			if(check == 3) break; // end loop if out of bounds
         }
@@ -176,21 +176,21 @@ std::vector<std::pair<int, int>> GetDiagonalMoves(ChessBoard &board, int x, int 
     return moves;
 }
 
-std::vector<std::pair<int, int>> GetKnightMoves(ChessBoard &board, int x, int y) {
+std::vector<Move> GetKnightMoves(ChessBoard &board, int x, int y) {
     Piece piece = At(board.field, x, y);
-    std::vector<std::pair<int, int>> moves;
+    std::vector<Move> moves;
     for (int i = 0; i < knightoffsets.size(); i += 2) {
         std::vector<int> cords = { x + knightoffsets[i], y + knightoffsets[i + 1] };
         int check = CheckField(board, cords[0], cords[1] );
-        if(check == 0) moves.emplace_back( cords[0], cords[1] );
-        if(check == 1) moves.emplace_back( cords[0], cords[1] );
+        if(check == 0) moves.emplace_back( Move{x, y, cords[0], cords[1]} );
+        if(check == 1) moves.emplace_back( Move{x, y, cords[0], cords[1]} );
     }
     return moves;
 }
 
-std::vector<std::pair<int, int>> GetPawnMoves(ChessBoard &board, int x, int y) {
+std::vector<Move> GetPawnMoves(ChessBoard &board, int x, int y) {
     Piece piece = At(board.field, x, y);
-    std::vector<std::pair<int, int>> moves;
+    std::vector<Move> moves;
     // factor to make it fit for either side
     int factor = 1;
 	int isonbaseline = 0;
@@ -207,21 +207,21 @@ std::vector<std::pair<int, int>> GetPawnMoves(ChessBoard &board, int x, int y) {
     for (int i = isonbaseline; i < pawnoffsets.size(); i += 2) {
         std::vector<int> cords = { x + pawnoffsets[i] * factor, y + pawnoffsets[i + 1] * factor };
         int check = CheckField(board, cords[0], cords[1] );
-        if(check == 0 && pawnoffsets[i] == 0) moves.emplace_back( cords[0], cords[1] );
-        if(check == 1 && pawnoffsets[i] != 0) moves.emplace_back( cords[0], cords[1] );
+        if(check == 0 && pawnoffsets[i] == 0) moves.emplace_back( Move{x, y, cords[0], cords[1]} );
+        if(check == 1 && pawnoffsets[i] != 0) moves.emplace_back( Move{x, y, cords[0], cords[1]} );
     }
     return moves;
 }
 
-std::vector<std::pair<int, int>> GetKingMoves(ChessBoard &board, int x, int y) {
+std::vector<Move> GetKingMoves(ChessBoard &board, int x, int y) {
     Piece piece = At(board.field, x, y);
-    std::vector<std::pair<int, int>> moves;
+    std::vector<Move> moves;
     for (int i = x - 1; i < x + 2; ++i) {
         for (int j = y - 1; j < y + 2; ++j) {
             if( 0 <= x && x < 8 && 0 <= y && y < 8){
                 int check = CheckField(board, i, j );
-                if(check == 0) moves.emplace_back( i, j );
-                if(check == 1) moves.emplace_back( i, j );
+                if(check == 0) moves.emplace_back( Move{x, y, i, j} );
+                if(check == 1) moves.emplace_back( Move{x, y, i, j} );
                 // if check return 2, it checks the field where king is on
             }
         }
