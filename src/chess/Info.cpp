@@ -2,7 +2,6 @@
 
 #include "Info.hpp"
 
-
 // print info on piece on field x, y
 void FieldInfo(ChessBoard &board, int x, int y){
     int piece = board.field.at(y).at(x);

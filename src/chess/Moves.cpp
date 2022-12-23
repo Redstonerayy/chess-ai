@@ -18,7 +18,8 @@ std::vector<Move> GetAllPossibleMoves(ChessBoard &board, int player){ // 0 = bla
 				for(int k = 0; k < moves.size(); ++k){
                     // std::cout << moves.at(k).first << ":" << moves.at(k).second << std::endl;
 					allmoves.insert(allmoves.begin(), moves.begin(), moves.end()); // from x,y to x,y
-				}
+                    //Error here
+                }
 			}
         }
     }
