@@ -14,11 +14,11 @@ BitBoard MakeStartField(){
     startfield.whiteKing = 8;
     // black pieces
     startfield.blackPawns = 71776119061217280;
-    startfield.blackKnights = 4755801206503244000;
-    startfield.blackBishops = 2594073385365405700;
-    startfield.blackRooks = 9295429630892704000;
-    startfield.blackQueens = 1152921504606847000;
-    startfield.blackKing = 576460752303423500;
+    startfield.blackKnights = 4755801206503243776;
+    startfield.blackBishops = 2594073385365405696;
+    startfield.blackRooks = 9295429630892703744;
+    startfield.blackQueens = 1152921504606846976;
+    startfield.blackKing = 576460752303423488;
 
     return startfield;
 }
