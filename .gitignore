@@ -1,2 +1,7 @@
+# build files
 /build
+# vscode stuff
 /.vscode
+# CLion stuff
+/.idea
+/cmake-build-debug

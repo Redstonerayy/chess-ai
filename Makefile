@@ -8,3 +8,7 @@ run: build
 
 clean:
 	rm -rf ./build
+
+clean-clion:
+	rm -rf ./.idea
+	rm -rf cmake-build-debug

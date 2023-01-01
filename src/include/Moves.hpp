@@ -1,21 +1,14 @@
-#pragma once 
+#pragma once
 
-#include <vector>
+#include "ChessBoard.hpp"
 
-#include "definitions.hpp"
-
-// get possible moves
-std::vector<Move> GetAllPossibleMoves(ChessBoard &board, int player);
-std::vector<Move> GetPossibleMoves(ChessBoard &board, int x, int y);
-std::vector<Move> GetPossibleMovesRook(ChessBoard &board, int x, int y);
-std::vector<Move> GetPossibleMovesKnight(ChessBoard &board, int x, int y);
-std::vector<Move> GetPossibleMovesBishop(ChessBoard &board, int x, int y);
-std::vector<Move> GetPossibleMovesQueen(ChessBoard &board, int x, int y);
-std::vector<Move> GetPossibleMovesKing(ChessBoard &board, int x, int y);
-std::vector<Move> GetPossibleMovesPawn(ChessBoard &board, int x, int y);
-// actually get moves
-std::vector<Move> GetStraightMoves(ChessBoard &board, int x, int y);
-std::vector<Move> GetDiagonalMoves(ChessBoard &board, int x, int y);
-std::vector<Move> GetKnightMoves(ChessBoard &board, int x, int y);
-std::vector<Move> GetKingMoves(ChessBoard &board, int x, int y);
-std::vector<Move> GetPawnMoves(ChessBoard &board, int x, int y);
+bool IsEnemy(ChessBoard &board, Pos pos, bool direction);
+void AddMove(ChessBoard &board, Pos newpos, bool direction, bool blocked, std::vector<Pos> &legalmoves, std::vector<Pos> &allmoves);
+void GetStraightMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Pos> &legalmoves, std::vector<Pos> &allmoves);
+void GetDiagonalMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Pos> legalmoves, std::vector<Pos> allmoves);
+std::vector<std::vector<Pos>> GetPawnMoves(ChessBoard &board, Pos pos);
+std::vector<std::vector<Pos>> GetRookMoves(ChessBoard &board, Pos pos);
+std::vector<std::vector<Pos>> GetKnightMoves(ChessBoard &board, Pos pos);
+std::vector<std::vector<Pos>> GetBishopMoves(ChessBoard &board, Pos pos);
+std::vector<std::vector<Pos>> GetQueenMoves(ChessBoard &board, Pos pos);
+std::vector<std::vector<Pos>> GetKingMoves(ChessBoard &board, Pos pos);
