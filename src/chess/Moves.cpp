@@ -57,9 +57,10 @@ bool IsEnemy(ChessBoard &board, Pos pos, bool direction){
     }
 }
 
-void AddMove(ChessBoard &board, Pos newpos, bool direction, bool blocked, std::vector<Pos> &legalmoves, std::vector<Pos> &allmoves){
+void AddMove(ChessBoard &board, Pos newpos, bool direction, bool &blocked, std::vector<Pos> &legalmoves, std::vector<Pos> &allmoves){
     if( blocked ){
         allmoves.emplace_back(newpos);
+        return; // can't be legal move
     }
     if ( board.board.at(newpos.y).at(newpos.x) == 0 ){
         legalmoves.emplace_back(newpos);
@@ -100,12 +101,12 @@ void GetStraightMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Po
     }
 }
 
-void GetDiagonalMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Pos> legalmoves, std::vector<Pos> allmoves){
+void GetDiagonalMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Pos> &legalmoves, std::vector<Pos> &allmoves){
     int8_t x, y;
     // left up
     bool blocked = false;
-    x = --pos.x;
-    y = --pos.y;
+    x = pos.x - 1;
+    y = pos.y - 1;
     while( IsInRange(x, y) ){
         AddMove(board, Pos{x, y}, direction, blocked, legalmoves, allmoves);
         --x;
@@ -113,8 +114,8 @@ void GetDiagonalMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Po
     }
     // right up
     blocked = false;
-    x = ++pos.x;
-    y = --pos.y;
+    x = pos.x + 1;
+    y = pos.y - 1;
     while( IsInRange(x, y) ){
         AddMove(board, Pos{x, y}, direction, blocked, legalmoves, allmoves);
         ++x;
@@ -122,8 +123,8 @@ void GetDiagonalMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Po
     }
     // left down
     blocked = false;
-    x = --pos.x;
-    y = ++pos.y;
+    x = pos.x - 1;
+    y = pos.y + 1;
     while( IsInRange(x, y) ){
         AddMove(board, Pos{x, y}, direction, blocked, legalmoves, allmoves);
         --x;
@@ -131,8 +132,8 @@ void GetDiagonalMoves(ChessBoard &board, Pos pos, bool direction, std::vector<Po
     }
     // right down
     blocked = false;
-    x = ++pos.x;
-    y = ++pos.y;
+    x = pos.x + 1;
+    y = pos.y + 1;
     while( IsInRange(x, y) ){
         AddMove(board, Pos{x, y}, direction, blocked, legalmoves, allmoves);
         ++x;
@@ -188,7 +189,8 @@ std::vector<std::vector<Pos>> GetKnightMoves(ChessBoard &board, Pos pos){
         newpos.x = pos.x + offset.x;
         newpos.y = pos.y + offset.y;
         if( IsInRange(newpos.x, newpos.y) ){
-            AddMove(board, pos, direction, false, legalmoves, allmoves);
+            bool blocked = false; // needed because passed as refenrece
+            AddMove(board, newpos, direction, blocked, legalmoves, allmoves);
         }
     }
     return { legalmoves, allmoves };
@@ -200,7 +202,7 @@ std::vector<std::vector<Pos>> GetBishopMoves(ChessBoard &board, Pos pos){
     std::vector<Pos> allmoves;
     
     GetDiagonalMoves(board, pos, direction, legalmoves, allmoves);
-    
+
     return { legalmoves, allmoves};
 }
 
@@ -224,7 +226,8 @@ std::vector<std::vector<Pos>> GetKingMoves(ChessBoard &board, Pos pos){
         newpos.x = pos.x + offset.x;
         newpos.y = pos.y + offset.y;
         if( IsInRange(newpos.x, newpos.y) ){
-            AddMove(board, pos, direction, false, legalmoves, allmoves);
+            bool blocked = false; // needed because passed as refenrece
+            AddMove(board, newpos, direction, blocked, legalmoves, allmoves);
         }
     }
     return { legalmoves, allmoves };

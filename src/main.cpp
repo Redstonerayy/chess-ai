@@ -13,7 +13,7 @@ int main() {
     //     std::vector<std::vector<Pos>> moves = GetPawnMoves(mainboard, Pos{i, 6});
     //     PrintMoves(moves.at(0), moves.at(1));
     // }
-    std::vector<std::vector<Pos>> moves = GetRookMoves(mainboard, Pos{0, 0});
+    std::vector<std::vector<Pos>> moves = GetKingMoves(mainboard, Pos{4, 0});
     PrintMoves(moves.at(0), moves.at(1));
     return 0;
 }
